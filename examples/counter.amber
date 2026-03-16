@@ -1,0 +1,17 @@
+// counter.amber — a simple counter process
+
+const counterLoop = (state) =>
+  receive {
+    { type: "inc" }       => counterLoop({ ...state, count: state.count + 1 }),
+    { type: "get", from } => {
+      send(from, state.count)
+      counterLoop(state)
+    },
+    { type: "stop" }      => state.count
+  }
+
+const counter = spawn(counterLoop, { count: 0 })
+
+send(counter, { type: "inc" })
+send(counter, { type: "inc" })
+send(counter, { type: "get", from: self })

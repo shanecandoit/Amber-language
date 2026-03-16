@@ -1,0 +1,21 @@
+// schema.amber — flat table with a schema
+
+const Position = schema({ x: "f32", y: "f32", z: "f32" })
+
+const positions = table(Position, [
+  { x: 1.0, y: 2.0, z: 3.0 },
+  { x: 4.0, y: 5.0, z: 6.0 },
+])
+
+// Pattern matching over a union result
+const Result = union({
+  ok:    { value: "ref" },
+  error: { code: "u32", message: "str" },
+})
+
+const describe = (r) =>
+  match(r) {
+    { type: "ok",    value }      => `got value: ${value}`,
+    { type: "error", code, message } => `error ${code}: ${message}`,
+    _                             => "unknown result"
+  }
