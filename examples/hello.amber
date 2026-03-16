@@ -1,0 +1,7 @@
+// hello.amber — simplest Amber program
+
+const greeting = "hello, world"
+
+const shout = greeting => `${greeting}!`
+
+const result = shout(greeting)
